@@ -1,3 +1,63 @@
-h1 {
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab:wght@400;600&display=swap');
+
+*, *:before, *:after { box-sizing: border-box;}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: hsla(0, 0%, 86%, 0.5);
+  border-bottom: 2px solid #0077aa50;
+  box-shadow: 0px 5px 15px -9px rgba(0,119,170,0.5);
+  padding: 20px 0;
+}
+
+header h1 {
   color: #0077aa;
+  font-family: 'Roboto Slab', serif;
+  margin-top: 0;
+  text-align: center;
+}
+
+header section {
+  margin: 0 auto;
+  max-width: 500px;
+  padding: 0 20px;
+}
+
+.input-control {
+  border: 2px solid #0077aa50;
+  border-radius: 50px;
+  position: relative;
+}
+
+input, button {
+  border-radius: 50px;
+  border: none;
+  outline: none;
+}
+
+input {
+  padding: 10px 20px;
+  padding-right: 80px;
+  width: 100%;
+}
+
+button {
+  background: #0077aa50;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  color: #0077aa;
+  cursor: pointer;
+  height: 100%;
+  padding: 0 20px;
+  position: absolute;
+  right: 0;
+}
+
+button:hover {
+  background: #0077aa60;
 }
