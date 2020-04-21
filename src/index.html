@@ -10,36 +10,41 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="manifest" href="/site.webmanifest">
   <title>A Round Tuit</title>
+  <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
 </head>
 
 <body>
   <header>
     <h1>Round Tuit List</h1>
-    <section>
+    <section class="container">
       <div class="input-control">
         <input id="new-todo-item" type="text" placeholder="Something need doing?">
         <button id="save-button">Save</button>
       </div>
     </section>
   </header>
-  <main>
-    <p id="no-items-message">There's nothing todo :thumbsup:</p>
+  <main class="container">
+    <!-- <p id="no-items-message">
+      There's nothing todo
+      <span>
+        <ion-icon name="thumbs-up"></ion-icon>
+      </span>
+    </p>
     <ul id="todo-list">
       <li class="todo-list-item">
         <span>Random task</span>
-        <span>Delete</span>
+        <span class="todo-list-item-tick">
+          <ion-icon name="checkmark-outline"></ion-icon>
+        </span>
       </li>
       <li class="todo-list-item">
         <span>Odd job</span>
-        <span>Delete</span>
+        <span class="todo-list-item-tick">
+          <ion-icon name="checkmark-outline"></ion-icon>
+        </span>
       </li>
-    </ul>
+    </ul> -->
   </main>
-  <footer>
-    <p>
-      Made with :heart: by <a href="">Paul Terry</a>
-    </p>
-  </footer>
 </body>
 
 </html>

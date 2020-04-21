@@ -3,6 +3,7 @@
 *, *:before, *:after { box-sizing: border-box;}
 
 body {
+  background: #f5f5f5;
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
@@ -22,7 +23,7 @@ header h1 {
   text-align: center;
 }
 
-header section {
+.container {
   margin: 0 auto;
   max-width: 500px;
   padding: 0 20px;
@@ -60,4 +61,56 @@ button {
 
 button:hover {
   background: #0077aa60;
+}
+
+#no-items-message {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+#no-items-message span {
+  color: goldenrod;
+  font-size: 1.5em;
+  margin-left: 7px;
+  line-height: 0.85;
+}
+
+#todo-list {
+  list-style-type: none;
+  margin-top: 30px;
+  padding: 0;
+}
+
+.todo-list-item {
+  align-items: center;
+  border-bottom: 2px solid #0077aa50;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  transition: all 0.2s;
+}
+
+.todo-list-item:hover {
+  border-bottom-color: #0077aa80;
+  transform: scale(0.995);
+}
+
+.todo-list-item:first-of-type {
+  margin-top: 0;
+}
+
+.todo-list-item-tick {
+  line-height: 0;
+  font-size: 1.5em;
+  opacity: 0;
+}
+
+.todo-list-item:hover .todo-list-item-tick {
+  color: #0077aa;
+  opacity: 0.9;
+  transition: opacity 0.2s;
 }
