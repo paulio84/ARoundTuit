@@ -1,1 +1,123 @@
 import './assets.js';
+
+// TODO:
+// animate (somehow?) delete todo item
+// add soft delete
+// allow completed items to be uncompleted
+// add filters - text filter (debounce until 3 characters entered), show completed items
+// add permanent delete to completed items
+
+// define our data structure
+const todoData = {
+  todos: [],
+  nextId: 0,
+  loadTodoData() {
+    const todoData = JSON.parse(localStorage.getItem('todoData'));
+    if (todoData) {
+      const { nextId, todos } = todoData;
+      this.nextId = nextId;
+      this.todos = todos;
+    }
+    syncUI();
+  },
+  saveTodoData() {
+    const { nextId, todos } = this;
+    localStorage.setItem('todoData', JSON.stringify({ nextId, todos }));
+    syncUI();
+  },
+  createNewTodo(text) {
+    this.todos.push({ id: ++this.nextId, text });
+    this.saveTodoData();
+  },
+  todoCompleted(todoId) {
+    const newTodos = this.todos.filter((todo) => todo.id !== todoId);
+    this.todos = newTodos;
+    this.saveTodoData();
+  },
+  viewTodoData() {
+    console.table(this.todos);
+  }
+};
+
+const $saveButton = document.querySelector('#save-button');
+const $newTodoItemInput = document.querySelector('#new-todo-item');
+$saveButton.addEventListener('click', function () {
+  const text = $newTodoItemInput.value;
+  saveTodoItem(text);
+});
+$newTodoItemInput.addEventListener('keypress', function (event) {
+  if (event.keyCode === 13) {
+    saveTodoItem(this.value);
+  }
+});
+
+todoData.loadTodoData();
+
+// ==================================
+// Helper functions
+// ==================================
+function syncUI() {
+  const $mainContainer = document.querySelector('main.container');
+  clearMainContainer();
+
+  if (!todoData.todos || todoData.todos.length === 0) {
+    // display no items message
+    const $span = document.createElement('span');
+    const $icon = document.createElement('ion-icon');
+    $icon.setAttribute('name', 'thumbs-up');
+    $span.appendChild($icon);
+
+    const $p = document.createElement('p');
+    $p.id = "no-items-message";
+    $p.appendChild(document.createTextNode("There's nothing todo"));
+    $p.appendChild($span);
+
+    $mainContainer.appendChild($p);
+  } else {
+    // create a UL element to hold the todo items
+    const $todoList = document.createElement('ul');
+    $todoList.id = 'todo-list';
+
+    // build li elements for each todo in the array
+    for (let todo of todoData.todos) {
+      const $todoIcon = document.createElement('ion-icon');
+      $todoIcon.setAttribute('name', 'checkmark-outline');
+
+      const $todoCheck = document.createElement('span');
+      $todoCheck.classList.add('todo-list-item-tick');
+      $todoCheck.appendChild($todoIcon);
+
+      const $todoText = document.createElement('span');
+      $todoText.textContent = todo.text;
+
+      const $todoItem = document.createElement('li');
+      $todoItem.classList.add('todo-list-item');
+      $todoItem.appendChild($todoText);
+      $todoItem.appendChild($todoCheck);
+      $todoItem.dataset['todoId'] = todo.id;
+      $todoItem.addEventListener('click', todoCompleted);
+
+      $todoList.appendChild($todoItem);
+    }
+    $mainContainer.appendChild($todoList);
+  }
+}
+
+function clearMainContainer() {
+  const $mainContainer = document.querySelector('main.container');
+  for (let child of $mainContainer.children) {
+    $mainContainer.removeChild(child);
+  }
+}
+
+function saveTodoItem(text) {
+  if (!text) return;
+
+  todoData.createNewTodo(text);
+  $newTodoItemInput.value = "";
+}
+
+function todoCompleted() {
+  const id = parseInt(this.dataset.todoId);
+  todoData.todoCompleted(id);
+}
