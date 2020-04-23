@@ -1,11 +1,11 @@
 import './assets.js';
 
 // TODO:
-// fix icons in production
-// add soft delete
 // add filters - text filter (debounce until 3 characters entered), show completed items
 // allow completed items to be uncompleted
 // add permanent delete to completed items
+// add random messages when there's nowt todo
+// add a background image with quote "I'll do these things when I get a round to it."
 // animate (somehow?) delete todo item
 
 // define our data structure
@@ -27,12 +27,14 @@ const todoData = {
     syncUI();
   },
   createNewTodo(text) {
-    this.todos.push({ id: ++this.nextId, text });
+    this.todos.push({ id: ++this.nextId, text, isCompleted: false });
     this.saveTodoData();
   },
-  todoCompleted(todoId) {
-    const newTodos = this.todos.filter((todo) => todo.id !== todoId);
-    this.todos = newTodos;
+  todoCompleted(todoId, isCompleted) {
+    this.todos.forEach((todo) => {
+      if (todo.id === todoId)
+        todo.isCompleted = isCompleted;
+    });
     this.saveTodoData();
   }
 };
@@ -57,7 +59,7 @@ function syncUI() {
   const $mainContainer = document.querySelector('main.container');
   clearElementChildren($mainContainer);
 
-  if (!todoData.todos || todoData.todos.length === 0) {
+  if (allItemsCompleted()) {
     // display no items message
     const $p = buildUINoItemsMessage();
     $mainContainer.appendChild($p);
@@ -66,11 +68,13 @@ function syncUI() {
     const $todoList = document.createElement('ul');
     $todoList.id = 'todo-list';
 
-    for (let todo of todoData.todos) {
-      // build li elements for each todo item in the array
-      const $todoItem = buildUITodoItem(todo);
-      $todoList.appendChild($todoItem);
-    }
+    // build li elements for each todo item in the array
+    todoData.todos.forEach((todo) => {
+      if (!todo.isCompleted) {
+        const $todoItem = buildUITodoItem(todo);
+        $todoList.appendChild($todoItem);
+      }
+    });
     $mainContainer.appendChild($todoList);
   }
 }
@@ -85,7 +89,7 @@ function buildUINoItemsMessage() {
 
   const $p = document.createElement('p');
   $p.id = "no-items-message";
-  $p.appendChild(document.createTextNode("There's nothing todo"));
+  $p.appendChild(document.createTextNode("There's nothing to-do"));
   $p.appendChild($span);
 
   return $p;
@@ -112,6 +116,13 @@ function buildUITodoItem(todo) {
   return $todoItem;
 }
 
+function allItemsCompleted() {
+  const isEmpty = (todoData.todos.length === 0);
+  const allItemsCompleted = todoData.todos.every(todo => todo.isCompleted);
+
+  return todoData.todos && (isEmpty || allItemsCompleted);
+}
+
 function clearElementChildren(el) {
   for (let child of el.children) {
     el.removeChild(child);
@@ -126,5 +137,5 @@ function saveTodoItem(text) {
 }
 
 function todoCompleted(todo) {
-  todoData.todoCompleted(todo.id);
+  todoData.todoCompleted(todo.id, true);
 }

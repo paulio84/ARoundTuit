@@ -110,7 +110,7 @@ button:hover {
 }
 
 .todo-list-item:hover .todo-list-item-tick {
-  color: #0077aa;
+  color: #0077aa80;
   opacity: 0.9;
   transition: opacity 0.2s;
 }
