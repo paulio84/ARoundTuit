@@ -89,7 +89,7 @@ function buildUINoItemsMessage() {
   return $p;
 }
 
-function buildUITodoItem({ id, text }) {
+function buildUITodoItem(todo) {
   const $todoIcon = document.createElement('ion-icon');
   $todoIcon.setAttribute('name', 'checkmark-outline');
 
@@ -98,14 +98,13 @@ function buildUITodoItem({ id, text }) {
   $todoCheck.appendChild($todoIcon);
 
   const $todoText = document.createElement('span');
-  $todoText.textContent = text;
+  $todoText.textContent = todo.text;
 
   const $todoItem = document.createElement('li');
   $todoItem.classList.add('todo-list-item');
   $todoItem.appendChild($todoText);
   $todoItem.appendChild($todoCheck);
-  $todoItem.dataset['todoId'] = id;
-  $todoItem.addEventListener('click', todoCompleted);
+  $todoItem.addEventListener('click', () => todoCompleted(todo));
 
   return $todoItem;
 }
@@ -123,7 +122,6 @@ function saveTodoItem(text) {
   $newTodoItemInput.value = "";
 }
 
-function todoCompleted() {
-  const id = parseInt(this.dataset.todoId);
-  todoData.todoCompleted(id);
+function todoCompleted(todo) {
+  todoData.todoCompleted(todo.id);
 }
