@@ -78,8 +78,9 @@ function syncUI() {
 function buildUINoItemsMessage() {
   const $span = document.createElement('span');
 
-  const $icon = document.createElement('ion-icon');
-  $icon.setAttribute('name', 'thumbs-up');
+  const $icon = document.createElement('i');
+  $icon.classList.add('fas');
+  $icon.classList.add('fa-thumbs-up');
   $span.appendChild($icon);
 
   const $p = document.createElement('p');
@@ -91,8 +92,9 @@ function buildUINoItemsMessage() {
 }
 
 function buildUITodoItem(todo) {
-  const $todoIcon = document.createElement('ion-icon');
-  $todoIcon.setAttribute('name', 'checkmark-outline');
+  const $todoIcon = document.createElement('i');
+  $todoIcon.classList.add('fas');
+  $todoIcon.classList.add('fa-check');
 
   const $todoCheck = document.createElement('span');
   $todoCheck.classList.add('todo-list-item-tick');
