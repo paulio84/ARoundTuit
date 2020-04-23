@@ -1,10 +1,14 @@
 import './assets.js';
 
+const messages = {
+  NO_ITEMS_MESSAGE: { id: 'no-items-message', message: "" },
+  GET_BUSY_MESSAGE: { id: 'get-busy-message', message: "Time to get busy!" }
+};
+
 // TODO:
-// add filters - text filter (debounce until 3 characters entered), show completed items
-// allow completed items to be uncompleted
-// add permanent delete to completed items
-// add random messages when there's nowt todo
+// on completed items have a delete symbol (to perma delete it)
+// add permanent delete for all completed items
+// add filters - text filter (debounce until 3 characters entered)
 // add a background image with quote "I'll do these things when I get a round to it."
 // animate (somehow?) delete todo item
 
@@ -36,18 +40,58 @@ const todoData = {
         todo.isCompleted = isCompleted;
     });
     this.saveTodoData();
+  },
+  deleteCompletedTodos() {
+    const todos = this.todos.filter(todo => !todo.isCompleted);
+    this.todos = todos;
+    this.saveTodoData();
+  },
+  deleteTodo(todoToDelete) {
+    const todos = this.todos.filter(todo => todo.id !== todoToDelete.id);
+    this.todos = todos;
+    this.saveTodoData();
+  },
+  numberOfActiveItems() {
+    return this.numberOfItemsByCompleted(false);
+  },
+  numberOfCompletedItems() {
+    return this.numberOfItemsByCompleted(true);
+  },
+  numberOfItemsByCompleted(isCompleted) {
+    const items = this.todos.filter(todo => todo.isCompleted === isCompleted);
+    return items.length;
   }
 };
 
+// ==================================
+// UI controls
+// ==================================
+// input and save button
 const $saveButton = document.querySelector('#save-button');
 const $newTodoItemInput = document.querySelector('#new-todo-item');
 $saveButton.addEventListener('click', function () {
-  saveTodoItem($newTodoItemInput.value);
+  saveTodoItem($newTodoItemInput.value.trim());
 });
 $newTodoItemInput.addEventListener('keypress', function (event) {
   if (event.keyCode === 13) {
-    saveTodoItem(this.value);
+    saveTodoItem(this.value.trim());
   }
+});
+
+// todo tab and completed tabs
+const $todoTabControl = document.querySelector('#todoTabControl');
+const $completedTabControl = document.querySelector('#completedTabControl');
+const $todoTab = document.querySelector('#todoTab');
+const $completedTab = document.querySelector('#completedTab');
+$todoTabControl.addEventListener('click', function (e) {
+  changeActiveTab(this);
+  $todoTab.classList.add('active');
+  $completedTab.classList.remove('active');
+});
+$completedTabControl.addEventListener('click', function (e) {
+  changeActiveTab(this);
+  $completedTab.classList.add('active');
+  $todoTab.classList.remove('active');
 });
 
 todoData.loadTodoData();
@@ -55,31 +99,50 @@ todoData.loadTodoData();
 // ==================================
 // Helper functions
 // ==================================
-function syncUI() {
-  const $mainContainer = document.querySelector('main.container');
-  clearElementChildren($mainContainer);
+function changeActiveTab(el) {
+  const parentChildren = [...el.parentElement.children];
+  parentChildren.forEach(child => child.classList.remove('active'));
 
-  if (allItemsCompleted()) {
-    // display no items message
-    const $p = buildUINoItemsMessage();
-    $mainContainer.appendChild($p);
+  el.classList.add('active');
+}
+
+function syncUI() {
+  clearElementChildren($todoTab);
+  clearElementChildren($completedTab);
+  messages.NO_ITEMS_MESSAGE.message = randomiseTodoMessage();
+
+  // are there any items at all
+  if (todoData.todos && todoData.todos.length === 0) {
+    // display a message on both tabs
+    buildUIMessage(messages.NO_ITEMS_MESSAGE, $todoTab);
+    buildUIMessage(messages.GET_BUSY_MESSAGE, $completedTab);
   } else {
-    // create a UL element to hold the todo items
-    const $todoList = document.createElement('ul');
-    $todoList.id = 'todo-list';
+    let $todoList;
+    let $completedTodoList;
+    if (todoData.numberOfActiveItems() === 0) {
+      buildUIMessage(messages.NO_ITEMS_MESSAGE, $todoTab);
+    } else {
+      $todoList = document.createElement('ul');
+      $todoList.classList.add('todo-list');
+      $todoTab.appendChild($todoList);
+    }
+    if (todoData.numberOfCompletedItems() === 0) {
+      buildUIMessage(messages.GET_BUSY_MESSAGE, $completedTab);
+    } else {
+      $completedTodoList = document.createElement('ul');
+      $completedTodoList.classList.add('todo-list');
+      $completedTab.appendChild($completedTodoList);
+    }
 
     // build li elements for each todo item in the array
     todoData.todos.forEach((todo) => {
-      if (!todo.isCompleted) {
-        const $todoItem = buildUITodoItem(todo);
-        $todoList.appendChild($todoItem);
-      }
+      const $todoItem = buildUITodoItem(todo);
+      todo.isCompleted ? $completedTodoList.appendChild($todoItem) : $todoList.appendChild($todoItem);
     });
-    $mainContainer.appendChild($todoList);
   }
 }
 
-function buildUINoItemsMessage() {
+function buildUIMessage({ id, message }, el) {
   const $span = document.createElement('span');
 
   const $icon = document.createElement('i');
@@ -88,17 +151,17 @@ function buildUINoItemsMessage() {
   $span.appendChild($icon);
 
   const $p = document.createElement('p');
-  $p.id = "no-items-message";
-  $p.appendChild(document.createTextNode("There's nothing to-do"));
+  $p.id = id;
+  $p.appendChild(document.createTextNode(message));
   $p.appendChild($span);
 
-  return $p;
+  el.appendChild($p);
 }
 
 function buildUITodoItem(todo) {
   const $todoIcon = document.createElement('i');
   $todoIcon.classList.add('fas');
-  $todoIcon.classList.add('fa-check');
+  (todo.isCompleted) ? $todoIcon.classList.add('fa-undo') : $todoIcon.classList.add('fa-check');
 
   const $todoCheck = document.createElement('span');
   $todoCheck.classList.add('todo-list-item-tick');
@@ -116,13 +179,6 @@ function buildUITodoItem(todo) {
   return $todoItem;
 }
 
-function allItemsCompleted() {
-  const isEmpty = (todoData.todos.length === 0);
-  const allItemsCompleted = todoData.todos.every(todo => todo.isCompleted);
-
-  return todoData.todos && (isEmpty || allItemsCompleted);
-}
-
 function clearElementChildren(el) {
   for (let child of el.children) {
     el.removeChild(child);
@@ -130,12 +186,16 @@ function clearElementChildren(el) {
 }
 
 function saveTodoItem(text) {
-  if (!text) return;
+  if (text) todoData.createNewTodo(text);
 
-  todoData.createNewTodo(text);
   $newTodoItemInput.value = "";
 }
 
 function todoCompleted(todo) {
-  todoData.todoCompleted(todo.id, true);
+  todoData.todoCompleted(todo.id, !todo.isCompleted);
+}
+
+function randomiseTodoMessage() {
+  const messages = ['Freeeedom!!!', "There's nothing to-do", 'Quick! Look busy!', 'Find something to-do'];
+  return messages[Math.floor(Math.random() * messages.length)];
 }

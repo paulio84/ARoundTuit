@@ -63,21 +63,21 @@ button:hover {
   background: #0077aa60;
 }
 
-#no-items-message {
+#no-items-message, #get-busy-message {
   align-items: center;
   display: flex;
   justify-content: center;
   margin-top: 30px;
 }
 
-#no-items-message span {
+#no-items-message span, #get-busy-message span {
   color: goldenrod;
   font-size: 1.5em;
   margin-left: 7px;
   line-height: 0.85;
 }
 
-#todo-list {
+.todo-list {
   list-style-type: none;
   margin-top: 30px;
   padding: 0;
@@ -113,4 +113,49 @@ button:hover {
   color: #0077aa80;
   opacity: 0.9;
   transition: opacity 0.2s;
+}
+
+.tab-group {
+  display: flex;
+  font-size: 1.25em;
+  justify-content: space-evenly;
+  list-style-type: none;
+  margin-top: 30px;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.tab-control {
+  color: #0077aa50;
+  cursor: pointer;
+}
+
+.tab-control:hover {
+  color: #0077aa;
+}
+
+.tab-control.active {
+  color: #0077aa;
+  border-bottom: 2px solid #0077aa80;
+  padding-bottom: 10px;
+}
+
+.tab-control a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#tab-content div {
+  display: none;
+  opacity: 0;
+}
+
+#tab-content div.active {
+  display: block;
+  opacity: 1;
+}
+
+.hidden {
+  display: none;
+  opacity: 0;
 }

@@ -14,7 +14,6 @@
     SameSite="none Secure"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/solid.min.js" crossorigin="anonymous"
     SameSite="none Secure"></script>
-
 </head>
 
 <body>
@@ -28,26 +27,39 @@
     </section>
   </header>
   <main class="container">
-    <!-- <p id="no-items-message">
-      There's nothing todo
-      <span>
-        <i class="fas fa-thumbs-up"></i>
-      </span>
-    </p>
-    <ul id="todo-list">
-      <li class="todo-list-item">
-        <span>Random task</span>
-        <span class="todo-list-item-tick">
-          <i class="fas fa-check"></i>
-        </span>
+    <ul class="tab-group">
+      <li id="todoTabControl" class="tab-control active">To-do
+        <!--<a id="tabTodos" href="">To-do</a>-->
       </li>
-      <li class="todo-list-item">
-        <span>Odd job</span>
-        <span class="todo-list-item-tick">
-          <ion-icon name="checkmark-outline"></ion-icon>
-        </span>
+      <li id="completedTabControl" class="tab-control">Completed
+        <!--<a id="tabCompleted" href="">Completed</a>-->
       </li>
-    </ul> -->
+    </ul>
+    <div id="tab-content">
+      <div id="todoTab" class="active">
+        <!-- <p id="no-items-message">
+          There's nothing todo
+          <span>
+            <i class="fas fa-thumbs-up"></i>
+          </span>
+        </p>
+        <ul id="todo-list">
+          <li class="todo-list-item">
+            <span>Random task</span>
+            <span class="todo-list-item-tick">
+              <i class="fas fa-check"></i>
+            </span>
+          </li>
+          <li class="todo-list-item">
+            <span>Odd job</span>
+            <span class="todo-list-item-tick">
+              <ion-icon name="checkmark-outline"></ion-icon>
+            </span>
+          </li>
+        </ul> -->
+      </div>
+      <div id="completedTab"></div>
+    </div>
   </main>
 </body>
 
