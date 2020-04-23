@@ -42,8 +42,7 @@ const todoData = {
 const $saveButton = document.querySelector('#save-button');
 const $newTodoItemInput = document.querySelector('#new-todo-item');
 $saveButton.addEventListener('click', function () {
-  const text = $newTodoItemInput.value;
-  saveTodoItem(text);
+  saveTodoItem($newTodoItemInput.value);
 });
 $newTodoItemInput.addEventListener('keypress', function (event) {
   if (event.keyCode === 13) {
@@ -58,7 +57,7 @@ todoData.loadTodoData();
 // ==================================
 function syncUI() {
   const $mainContainer = document.querySelector('main.container');
-  clearMainContainer();
+  clearElementChildren($mainContainer);
 
   if (!todoData.todos || todoData.todos.length === 0) {
     // display no items message
@@ -103,10 +102,9 @@ function syncUI() {
   }
 }
 
-function clearMainContainer() {
-  const $mainContainer = document.querySelector('main.container');
-  for (let child of $mainContainer.children) {
-    $mainContainer.removeChild(child);
+function clearElementChildren(el) {
+  for (let child of el.children) {
+    el.removeChild(child);
   }
 }
 
