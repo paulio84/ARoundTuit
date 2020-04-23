@@ -33,9 +33,6 @@ const todoData = {
     const newTodos = this.todos.filter((todo) => todo.id !== todoId);
     this.todos = newTodos;
     this.saveTodoData();
-  },
-  viewTodoData() {
-    console.table(this.todos);
   }
 };
 
@@ -61,45 +58,56 @@ function syncUI() {
 
   if (!todoData.todos || todoData.todos.length === 0) {
     // display no items message
-    const $span = document.createElement('span');
-    const $icon = document.createElement('ion-icon');
-    $icon.setAttribute('name', 'thumbs-up');
-    $span.appendChild($icon);
-
-    const $p = document.createElement('p');
-    $p.id = "no-items-message";
-    $p.appendChild(document.createTextNode("There's nothing todo"));
-    $p.appendChild($span);
-
+    const $p = buildUINoItemsMessage();
     $mainContainer.appendChild($p);
   } else {
     // create a UL element to hold the todo items
     const $todoList = document.createElement('ul');
     $todoList.id = 'todo-list';
 
-    // build li elements for each todo in the array
     for (let todo of todoData.todos) {
-      const $todoIcon = document.createElement('ion-icon');
-      $todoIcon.setAttribute('name', 'checkmark-outline');
-
-      const $todoCheck = document.createElement('span');
-      $todoCheck.classList.add('todo-list-item-tick');
-      $todoCheck.appendChild($todoIcon);
-
-      const $todoText = document.createElement('span');
-      $todoText.textContent = todo.text;
-
-      const $todoItem = document.createElement('li');
-      $todoItem.classList.add('todo-list-item');
-      $todoItem.appendChild($todoText);
-      $todoItem.appendChild($todoCheck);
-      $todoItem.dataset['todoId'] = todo.id;
-      $todoItem.addEventListener('click', todoCompleted);
-
+      // build li elements for each todo item in the array
+      const $todoItem = buildUITodoItem(todo);
       $todoList.appendChild($todoItem);
     }
     $mainContainer.appendChild($todoList);
   }
+}
+
+function buildUINoItemsMessage() {
+  const $span = document.createElement('span');
+
+  const $icon = document.createElement('ion-icon');
+  $icon.setAttribute('name', 'thumbs-up');
+  $span.appendChild($icon);
+
+  const $p = document.createElement('p');
+  $p.id = "no-items-message";
+  $p.appendChild(document.createTextNode("There's nothing todo"));
+  $p.appendChild($span);
+
+  return $p;
+}
+
+function buildUITodoItem({ id, text }) {
+  const $todoIcon = document.createElement('ion-icon');
+  $todoIcon.setAttribute('name', 'checkmark-outline');
+
+  const $todoCheck = document.createElement('span');
+  $todoCheck.classList.add('todo-list-item-tick');
+  $todoCheck.appendChild($todoIcon);
+
+  const $todoText = document.createElement('span');
+  $todoText.textContent = text;
+
+  const $todoItem = document.createElement('li');
+  $todoItem.classList.add('todo-list-item');
+  $todoItem.appendChild($todoText);
+  $todoItem.appendChild($todoCheck);
+  $todoItem.dataset['todoId'] = id;
+  $todoItem.addEventListener('click', todoCompleted);
+
+  return $todoItem;
 }
 
 function clearElementChildren(el) {
