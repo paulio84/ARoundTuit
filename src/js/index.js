@@ -1,11 +1,12 @@
 import './assets.js';
 
 // TODO:
-// animate (somehow?) delete todo item
+// fix icons in production
 // add soft delete
-// allow completed items to be uncompleted
 // add filters - text filter (debounce until 3 characters entered), show completed items
+// allow completed items to be uncompleted
 // add permanent delete to completed items
+// animate (somehow?) delete todo item
 
 // define our data structure
 const todoData = {
