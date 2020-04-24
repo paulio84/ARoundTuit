@@ -35,10 +35,9 @@ const todoData = {
     this.saveTodoData();
   },
   todoCompleted(todoId, isCompleted) {
-    this.todos.forEach((todo) => {
-      if (todo.id === todoId)
-        todo.isCompleted = isCompleted;
-    });
+    const index = this.todos.findIndex(todo => todo.id === todoId);
+    this.todos[index].isCompleted = isCompleted;
+
     this.saveTodoData();
   },
   deleteCompletedTodos() {
@@ -100,8 +99,9 @@ todoData.loadTodoData();
 // Helper functions
 // ==================================
 function changeActiveTab(el) {
-  const parentChildren = [...el.parentElement.children];
-  parentChildren.forEach(child => child.classList.remove('active'));
+  const elSiblings = [...el.parentElement.children];
+  for (let sibling of elSiblings)
+    sibling.classList.remove('active');
 
   el.classList.add('active');
 }
@@ -135,10 +135,10 @@ function syncUI() {
     }
 
     // build li elements for each todo item in the array
-    todoData.todos.forEach((todo) => {
+    for (let todo of todoData.todos) {
       const $todoItem = buildUITodoItem(todo);
       todo.isCompleted ? $completedTodoList.appendChild($todoItem) : $todoList.appendChild($todoItem);
-    });
+    }
   }
 }
 
