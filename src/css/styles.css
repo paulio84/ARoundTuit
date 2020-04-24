@@ -100,7 +100,6 @@ main {
 .todo-list-item {
   align-items: center;
   border-bottom: 2px solid #0077aa50;
-  cursor: pointer;
   display: flex;
   justify-content: space-between;
   padding-bottom: 10px;
@@ -108,24 +107,20 @@ main {
   transition: all 0.2s;
 }
 
-.todo-list-item:hover {
-  border-bottom-color: #0077aa80;
-  transform: scale(0.995);
-}
-
 .todo-list-item:first-of-type {
   margin-top: 0;
 }
 
-.todo-list-item-tick {
+.todo-list-item-icon {
+  color: #0077aa;
   line-height: 0;
   font-size: 1.5em;
-  opacity: 0;
+  opacity: 0.4;
 }
 
-.todo-list-item:hover .todo-list-item-tick {
-  color: #0077aa80;
-  opacity: 0.9;
+.todo-list-item-icon:hover {
+  cursor: pointer;
+  opacity: 0.8;
   transition: opacity 0.2s;
 }
 

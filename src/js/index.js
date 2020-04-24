@@ -163,8 +163,9 @@ function buildUITodoItem(todo) {
   (todo.isCompleted) ? $todoIcon.classList.add('fa-undo') : $todoIcon.classList.add('fa-check');
 
   const $todoCheck = document.createElement('span');
-  $todoCheck.classList.add('todo-list-item-tick');
+  $todoCheck.classList.add('todo-list-item-icon');
   $todoCheck.appendChild($todoIcon);
+  $todoCheck.addEventListener('click', () => todoCompleted(todo));
 
   const $todoText = document.createElement('span');
   $todoText.textContent = todo.text;
@@ -173,7 +174,6 @@ function buildUITodoItem(todo) {
   $todoItem.classList.add('todo-list-item');
   $todoItem.appendChild($todoText);
   $todoItem.appendChild($todoCheck);
-  $todoItem.addEventListener('click', () => todoCompleted(todo));
 
   return $todoItem;
 }
