@@ -9,7 +9,6 @@ const messages = {
 // on completed items have a delete symbol (to perma delete it)
 // add permanent delete for all completed items
 // add filters - text filter (debounce until 3 characters entered)
-// add a background image with quote "I'll do these things when I get a round to it."
 // animate (somehow?) delete todo item
 
 // define our data structure
