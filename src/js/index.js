@@ -159,34 +159,34 @@ function buildUITodoItem(todo) {
   const $todoItem = document.createElement('li');
   $todoItem.classList.add('todo-list-item');
 
-  const $todoText = document.createElement('span');
-  $todoText.classList.add('flex-grow-helper');
-  $todoText.textContent = todo.text;
-  $todoItem.appendChild($todoText);
+  const $todoItemText = document.createElement('span');
+  $todoItemText.classList.add('flex-grow-helper');
+  $todoItemText.textContent = todo.text;
+  $todoItem.appendChild($todoItemText);
 
-  const $todoIcon = document.createElement('i');
-  $todoIcon.classList.add('fas');
-  (todo.isCompleted) ? $todoIcon.classList.add('fa-undo') : $todoIcon.classList.add('fa-check');
-
-  const $todoCheck = document.createElement('span');
-  $todoCheck.classList.add('todo-list-item-icon');
-  $todoCheck.appendChild($todoIcon);
-  $todoCheck.addEventListener('click', () => todoCompleted(todo));
-  $todoItem.appendChild($todoCheck);
+  const $todoItemIcon = (todo.isCompleted) ? buildUITodoIcon('fa-undo') : buildUITodoIcon('fa-check');
+  $todoItemIcon.addEventListener('click', () => todoCompleted(todo));
+  $todoItem.appendChild($todoItemIcon);
 
   // also create a trash icon for isCompleted todo items
   if (todo.isCompleted) {
-    const $iconBin = document.createElement('i');
-    $iconBin.classList.add('fas', 'fa-trash');
-
-    const $permDelete = document.createElement('span');
-    $permDelete.classList.add('todo-list-item-icon');
-    $permDelete.appendChild($iconBin);
-    $permDelete.addEventListener('click', () => todoDeleteById(todo.id));
-    $todoItem.appendChild($permDelete);
+    const $todoItemTrashIcon = buildUITodoIcon('fa-trash');
+    $todoItemTrashIcon.addEventListener('click', () => todoDeleteById(todo.id));
+    $todoItem.appendChild($todoItemTrashIcon);
   }
 
   return $todoItem;
+}
+
+function buildUITodoIcon(symbol) {
+  const $icon = document.createElement('i');
+  $icon.classList.add('fas', symbol);
+
+  const $iconWrapper = document.createElement('span');
+  $iconWrapper.classList.add('todo-list-item-icon');
+  $iconWrapper.appendChild($icon);
+
+  return $iconWrapper;
 }
 
 function clearElementChildren(el) {
