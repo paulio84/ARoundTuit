@@ -73,7 +73,6 @@ button:hover {
 }
 
 main {
-  flex-grow: 1;
   width: 100%;
 }
 
@@ -116,6 +115,10 @@ main {
   line-height: 0;
   font-size: 1.5em;
   opacity: 0.4;
+}
+
+.todo-list-item-icon:last-child {
+  margin-left: 20px;
 }
 
 .todo-list-item-icon:hover {
@@ -170,4 +173,8 @@ footer {
 
 footer img {
   width: 100%;
+}
+
+.flex-grow-helper {
+  flex-grow: 1;
 }

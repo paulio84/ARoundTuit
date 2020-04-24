@@ -5,8 +5,7 @@ const messages = {
   GET_BUSY_MESSAGE: { id: 'get-busy-message', message: "Time to get busy!" }
 };
 
-// TODO:
-// on completed items have a delete symbol (to perma delete it)
+// POSSIBLE NEW FEATURES:
 // add permanent delete for all completed items
 // add filters - text filter (debounce until 3 characters entered)
 // animate (somehow?) delete todo item
@@ -44,8 +43,8 @@ const todoData = {
     this.todos = todos;
     this.saveTodoData();
   },
-  deleteTodo(todoToDelete) {
-    const todos = this.todos.filter(todo => todo.id !== todoToDelete.id);
+  deleteTodoById(todoId) {
+    const todos = this.todos.filter(todo => todo.id !== todoId);
     this.todos = todos;
     this.saveTodoData();
   },
@@ -145,8 +144,7 @@ function buildUIMessage({ id, message }, el) {
   const $span = document.createElement('span');
 
   const $icon = document.createElement('i');
-  $icon.classList.add('fas');
-  $icon.classList.add('fa-thumbs-up');
+  $icon.classList.add('fas', 'fa-thumbs-up');
   $span.appendChild($icon);
 
   const $p = document.createElement('p');
@@ -158,6 +156,14 @@ function buildUIMessage({ id, message }, el) {
 }
 
 function buildUITodoItem(todo) {
+  const $todoItem = document.createElement('li');
+  $todoItem.classList.add('todo-list-item');
+
+  const $todoText = document.createElement('span');
+  $todoText.classList.add('flex-grow-helper');
+  $todoText.textContent = todo.text;
+  $todoItem.appendChild($todoText);
+
   const $todoIcon = document.createElement('i');
   $todoIcon.classList.add('fas');
   (todo.isCompleted) ? $todoIcon.classList.add('fa-undo') : $todoIcon.classList.add('fa-check');
@@ -166,14 +172,19 @@ function buildUITodoItem(todo) {
   $todoCheck.classList.add('todo-list-item-icon');
   $todoCheck.appendChild($todoIcon);
   $todoCheck.addEventListener('click', () => todoCompleted(todo));
-
-  const $todoText = document.createElement('span');
-  $todoText.textContent = todo.text;
-
-  const $todoItem = document.createElement('li');
-  $todoItem.classList.add('todo-list-item');
-  $todoItem.appendChild($todoText);
   $todoItem.appendChild($todoCheck);
+
+  // also create a trash icon for isCompleted todo items
+  if (todo.isCompleted) {
+    const $iconBin = document.createElement('i');
+    $iconBin.classList.add('fas', 'fa-trash');
+
+    const $permDelete = document.createElement('span');
+    $permDelete.classList.add('todo-list-item-icon');
+    $permDelete.appendChild($iconBin);
+    $permDelete.addEventListener('click', () => todoDeleteById(todo.id));
+    $todoItem.appendChild($permDelete);
+  }
 
   return $todoItem;
 }
@@ -192,6 +203,10 @@ function saveTodoItem(text) {
 
 function todoCompleted(todo) {
   todoData.todoCompleted(todo.id, !todo.isCompleted);
+}
+
+function todoDeleteById(todoId) {
+  todoData.deleteTodoById(todoId);
 }
 
 function randomiseTodoMessage() {
